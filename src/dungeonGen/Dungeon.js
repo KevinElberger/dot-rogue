@@ -74,9 +74,6 @@ export default class Dungeon {
     const minY = Math.min(previousRoom.center[1], currentRoom.center[1]);
     const maxY = Math.max(previousRoom.center[1], currentRoom.center[1]);
     const centerY = previousRoom.center[1] > currentRoom.center[1] ? currentRoom.center[1] : previousRoom.center[1];
-    const currentRoomIsTopLeftToPreviousRoom = (
-      currentRoom.center[0] < previousRoom.center[0] && currentRoom.center[1] < previousRoom.center[1]
-    );
     const currentRoomIsBottomLeftToPreviousRoom = (
       currentRoom.center[0] > previousRoom.center[0] && currentRoom.center[1] < previousRoom.center[1]
     );
