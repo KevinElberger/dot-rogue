@@ -5,7 +5,7 @@ import Room from './Room.js';
 export default class Dungeon {
   map;
   rooms = [];
-  maxRooms = 10;
+  maxRooms = 2;
   minRoomSize = 4;
   maxRoomSize = 8;
 
@@ -21,19 +21,10 @@ export default class Dungeon {
   }
 
   createRooms() {
-    var newCenter = null;
-
     for (let r = 0; r < this.maxRooms; r++) {
-      const w = getRandomArbitrary(this.minRoomSize, this.maxRoomSize);
-      const h = getRandomArbitrary(this.minRoomSize, this.maxRoomSize);
-      const x = getRandomArbitrary(0, MAP_WIDTH - 1);
-      const y = getRandomArbitrary(0, MAP_HEIGHT - 1);
+      const newRoom = this.createRoom();
 
-      const newRoom = new Room(x, y, w, h);
-
-      console.log(newRoom);
-
-      var failed = false;
+      let failed = false;
 
       this.rooms.forEach(room => {
         if (newRoom.intersects(room)) {
@@ -44,42 +35,74 @@ export default class Dungeon {
 
       if (failed) return;
 
-      newCenter = newRoom.center;
-
       if (this.rooms.length) {
-        const startVertically = Math.random() > 0.5;
-        const lastRoomCenter = this.rooms[this.rooms.length - 1].center;
-
-        if (startVertically) {
-          this.carveVerticalCorridor(lastRoomCenter[0], newCenter[0], lastRoomCenter[1]);
-          this.carveHorizontalCorridor(lastRoomCenter[1], newCenter[1], lastRoomCenter[0]);
-        } else {
-          this.carveHorizontalCorridor(lastRoomCenter[1], newCenter[1], lastRoomCenter[0]);
-          this.carveVerticalCorridor(lastRoomCenter[0], newCenter[0], lastRoomCenter[1]);
-        }
+        const previousRoom = this.rooms[this.rooms.length - 1];
+        this.carveCorridors(previousRoom, newRoom);
       }
 
       this.rooms.push(newRoom);
     }
   }
 
-  carveHorizontalCorridor(x1, x2, y) {
-    const min = Math.min(x1, x2);
-    const max = Math.max(x1, x2);
+  createRoom() {
+    const { x, y, w, h } = this.createRoomDimensions();
 
-    for (let x = min; x < max; x++) {
-      if (max < MAP_WIDTH - 1 && y < MAP_HEIGHT)
-        this.map[x][y] = TILES.GROUND;
+    let newRoom = new Room(x, y, w, h);
+
+    while (!newRoom.isValid()) {
+      const { x, y, w, h } = this.createRoomDimensions();
+      newRoom = new Room(x, y, w, h);
     }
+
+    return newRoom;
   }
 
-  carveVerticalCorridor(y1, y2, x) {
-    const min = Math.min(y1, y2);
-    const max = Math.max(y1, y2);
+  createRoomDimensions() {
+    const w = getRandomArbitrary(this.minRoomSize, this.maxRoomSize);
+    const h = getRandomArbitrary(this.minRoomSize, this.maxRoomSize);
+    const x = getRandomArbitrary(0, MAP_HEIGHT - 1);
+    const y = getRandomArbitrary(0, MAP_WIDTH - 1);
 
-    for (let y = min; y < max; y++) {
-      if (max < MAP_HEIGHT - 1 && y < MAP_HEIGHT)
-        this.map[x][y] = TILES.GROUND;
+    return {
+      w, h, x, y
+    };
+  }
+
+  carveCorridors(previousRoom, currentRoom) {
+    const minX = Math.min(previousRoom.center[0], currentRoom.center[0]);
+    const maxX = Math.max(previousRoom.center[0], currentRoom.center[0]);
+    const minY = Math.min(previousRoom.center[1], currentRoom.center[1]);
+    const maxY = Math.max(previousRoom.center[1], currentRoom.center[1]);
+    const centerY = previousRoom.center[1] > currentRoom.center[1] ? currentRoom.center[1] : previousRoom.center[1];
+    const currentRoomIsTopLeftToPreviousRoom = (
+      currentRoom.center[0] < previousRoom.center[0] && currentRoom.center[1] < previousRoom.center[1]
+    );
+    const currentRoomIsBottomLeftToPreviousRoom = (
+      currentRoom.center[0] > previousRoom.center[0] && currentRoom.center[1] < previousRoom.center[1]
+    );
+    const currentRoomIsTopRightToPreviousRoom = (
+      currentRoom.center[0] < previousRoom.center[0] && currentRoom.center[1] > previousRoom.center[1]
+    );
+    const currentRoomIsBottomRightToPreviousRoom = (
+      currentRoom.center[0] > previousRoom.center[0] && currentRoom.center[1] > previousRoom.center[1]
+    );
+    let centerX;
+
+    if (currentRoomIsBottomRightToPreviousRoom) {
+      centerX = maxX;
+    } else if (currentRoomIsTopRightToPreviousRoom) {
+      centerX = minX;
+    } else if (currentRoomIsBottomLeftToPreviousRoom) {
+      centerX = minX;
+    } else {
+      centerX = maxX;
+    }
+
+    for (let x = minX; x <= maxX; x++) {
+      this.map[x][centerY] = TILES.GROUND;
+    }
+    for (let y = minY; y <= maxY; y++) {
+      this.map[centerX][y] = TILES.GROUND;
     }
   }
 
@@ -91,13 +114,13 @@ export default class Dungeon {
       const maxX = Math.max(room.x1, room.x2);
       const maxY = Math.max(room.y1, room.y2);
 
-      for (let x = 0; x < MAP_WIDTH - 1; x++) {
-        for (let y = 0; y < MAP_HEIGHT - 1; y++) {
+      for (let x = 0; x < MAP_WIDTH ; x++) {
+        for (let y = 0; y < MAP_HEIGHT; y++) {
           const inRoomBounds = (
             x >= minX
             && y >= minY
-            && x < maxX
-            && y < maxY
+            && x <= maxX
+            && y <= maxY
           );
 
           if (inRoomBounds) {

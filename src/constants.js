@@ -13,11 +13,13 @@ export const BUTTON = {
 
 export const TILE_HEIGHT = 1;
 export const TILE_WIDTH = 1;
-export const MAP_WIDTH = 36;
-export const MAP_HEIGHT = 36;
+export const MAP_WIDTH = 32;
+export const MAP_HEIGHT = 32;
 
 export const TILES = {
   VOID: ',',
   GROUND: 'x',
+  CORRIDOR: 'x',
+  CENTER: 'o',
   WALL: 2
 };

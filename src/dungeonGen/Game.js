@@ -6,7 +6,7 @@ export default class Game {
   player = null;
   controller = null;
   dungeon = null;
-  map = Array(MAP_WIDTH).fill().map(() => Array(MAP_HEIGHT).fill(','));
+  map = Array(MAP_HEIGHT).fill().map(() => Array(MAP_WIDTH));
 
   constructor() {
     this.dungeon = new Dungeon(this.map);

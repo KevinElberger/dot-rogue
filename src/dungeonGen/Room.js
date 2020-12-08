@@ -1,3 +1,5 @@
+import { MAP_WIDTH } from '../constants.js';
+
 export default class Room {
   x1;
   y1;
@@ -26,6 +28,16 @@ export default class Room {
       && this.x2 >= room.x1
       && this.y1 <= room.y2
       && this.y2 >= room.y1
+    );
+  }
+
+  isValid() {
+    return (
+      this.x1 < MAP_WIDTH &&
+      this.x2 < MAP_WIDTH &&
+      this.y1 < MAP_WIDTH &&
+      this.y2 < MAP_WIDTH &&
+      this.center[0] < MAP_WIDTH && this.center[1] < MAP_WIDTH
     );
   }
 }
