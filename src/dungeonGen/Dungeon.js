@@ -18,6 +18,7 @@ export default class Dungeon {
       this.createRooms();
     }
     this.drawRooms();
+    return this;
   }
 
   createRooms() {
@@ -87,9 +88,7 @@ export default class Dungeon {
 
     if (currentRoomIsBottomRightToPreviousRoom) {
       centerX = maxX;
-    } else if (currentRoomIsTopRightToPreviousRoom) {
-      centerX = minX;
-    } else if (currentRoomIsBottomLeftToPreviousRoom) {
+    } else if (currentRoomIsTopRightToPreviousRoom || currentRoomIsBottomLeftToPreviousRoom) {
       centerX = minX;
     } else {
       centerX = maxX;

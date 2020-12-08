@@ -1,8 +1,4 @@
-import {
-  GpioMapping,
-  LedMatrix,
-  LedMatrixUtils,
-} from 'rpi-led-matrix';
+import { LedMatrix, GpioMapping } from 'rpi-led-matrix';
 
 export const BUTTON = {
   X: [1, 0, 128, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 8, 0],
@@ -40,12 +36,17 @@ export const COLORS = {
   yellow: 0xFFFF00,
 };
 
+export const CONTROLLER = {
+  vid: 1118,
+  pid: 736
+};
+
 export const matrixOptions = {
   ...LedMatrix.defaultMatrixOptions(),
+  hardwareMapping: GpioMapping.AdafruitHat,
   rows: 32,
   cols: 32,
   chainLength: 1,
-  hardwareMapping: GpioMapping.AdafruitHat,
   parallel: 1,
 };
 
