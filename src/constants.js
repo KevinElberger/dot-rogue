@@ -1,3 +1,9 @@
+import {
+  GpioMapping,
+  LedMatrix,
+  LedMatrixUtils,
+} from 'rpi-led-matrix';
+
 export const BUTTON = {
   X: [1, 0, 128, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 8, 0],
   Y: [1, 0, 128, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 4, 0],
@@ -22,4 +28,28 @@ export const TILES = {
   CORRIDOR: 'x',
   CENTER: 'o',
   WALL: 2
+};
+
+export const COLORS = {
+  black: 0x000000,
+  red: 0xFF0000,
+  green: 0x00FF00,
+  blue: 0x0000FF,
+  magenta: 0xFF00FF,
+  cyan: 0x00FFFF,
+  yellow: 0xFFFF00,
+};
+
+export const matrixOptions = {
+  ...LedMatrix.defaultMatrixOptions(),
+  rows: 32,
+  cols: 32,
+  chainLength: 1,
+  hardwareMapping: GpioMapping.AdafruitHat,
+  parallel: 1,
+};
+
+export const runtimeOptions = {
+  ...LedMatrix.defaultRuntimeOptions(),
+  gpioSlowdown: 4,
 };
