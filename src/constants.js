@@ -1,4 +1,4 @@
-import { LedMatrix, GpioMapping } from 'rpi-led-matrix';
+// import { LedMatrix, GpioMapping } from 'rpi-led-matrix';
 
 export const BUTTON = {
   X: [1, 0, 128, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 8, 0],
@@ -42,8 +42,8 @@ export const CONTROLLER = {
 };
 
 export const matrixOptions = {
-  ...LedMatrix.defaultMatrixOptions(),
-  hardwareMapping: GpioMapping.AdafruitHat,
+  // ...LedMatrix.defaultMatrixOptions(),
+  // hardwareMapping: GpioMapping.AdafruitHat,
   rows: 32,
   cols: 32,
   chainLength: 1,
@@ -51,6 +51,6 @@ export const matrixOptions = {
 };
 
 export const runtimeOptions = {
-  ...LedMatrix.defaultRuntimeOptions(),
+  // ...LedMatrix.defaultRuntimeOptions(),
   gpioSlowdown: 4,
 };

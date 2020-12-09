@@ -7,7 +7,8 @@ export default class Room {
   y2;
   width;
   height;
-  center;;
+  center;
+  startingRoom = false;
 
   constructor(x, y, width, height) {
     this.x1 = x;
