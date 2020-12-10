@@ -1,5 +1,7 @@
 // import { LedMatrix, GpioMapping } from 'rpi-led-matrix';
 
+export const ONE_HOUR = 3600000;
+
 export const BUTTON = {
   X: [1, 0, 128, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 8, 0],
   Y: [1, 0, 128, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 4, 0],

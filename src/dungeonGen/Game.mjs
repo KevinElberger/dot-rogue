@@ -1,6 +1,6 @@
 import * as HID from 'node-hid';
 // import { LedMatrix } from 'rpi-led-matrix';
-import { BUTTON, MAP_HEIGHT, MAP_WIDTH } from '../constants.js';
+import { BUTTON, MAP_HEIGHT, MAP_WIDTH, ONE_HOUR } from '../constants.js';
 import Dungeon from './Dungeon.js';
 import { TILES } from '../constants.js';
 import { arraysEqual, getController, getRandomArbitrary } from '../utils.js';
@@ -28,6 +28,7 @@ export default class Game {
 
     this.dungeon = new Dungeon(this.map).create();
     this.setPlayerLocation();
+    this.drawMatrix();
 
     if (this.debug) {
       this.dungeon.drawMap();
@@ -45,46 +46,31 @@ export default class Game {
     });
 
     this.controller.on('data', data => {
-      data = JSON.parse(JSON.stringify(data));
-
-      const up = arraysEqual(data.data, BUTTON.UP);
-      const down = arraysEqual(data.data, BUTTON.DOWN);
-      const left = arraysEqual(data.data, BUTTON.LEFT);
-      const right = arraysEqual(data.data, BUTTON.RIGHT);
-      const pos = { x: this.player.x, y: this.player.y };
-
-      if (!up && !down && !left && !right) return;
-
-      if (up) pos.x += -1;
-      if (down) pos.x += 1;
-      if (left) pos.y += -1;
-      if (right) pos.y += 1;
-
-      if (this.isValidMove(pos.x, pos.y)) {
-        this.movePlayer(pos);
-      }
+      this.gameTick(data);
     });
+  }
 
-    // (async () => {
-    //   try {
-    //     this.matrix.clear();
+  gameTick(data) {
+    // Buffer stream of bytes: parse & stringify to obtain "data" byte values
+    data = JSON.parse(JSON.stringify(data));
 
-    //     this.matrix.afterSync((mat, dt, t) => {
-    //         this.matrix.map(([x, y, i]) => {
-    //           if (this.map[x][y]) {
-    //             return 0xFF00FF;
-    //           }
-    //           return 0x000000;
-    //         });
-    //     });
+    const up = arraysEqual(data.data, BUTTON.UP);
+    const down = arraysEqual(data.data, BUTTON.DOWN);
+    const left = arraysEqual(data.data, BUTTON.LEFT);
+    const right = arraysEqual(data.data, BUTTON.RIGHT);
+    const pos = { x: this.player.x, y: this.player.y };
 
-    //     this.matrix.sync();
+    if (!up && !down && !left && !right) return;
 
-    //     await wait(999999999);
-    //   } catch(error) {
-    //     console.log(error);
-    //   }
-    // })();
+    if (up) pos.x += -1;
+    if (down) pos.x += 1;
+    if (left) pos.y += -1;
+    if (right) pos.y += 1;
+
+    if (this.isValidMove(pos.x, pos.y)) {
+      this.movePlayer(pos);
+      this.drawMatrix();
+    }
   }
 
   setPlayerLocation() {
@@ -104,6 +90,29 @@ export default class Game {
     if (this.debug) {
       this.dungeon.drawMap();
     }
+  }
+
+  drawMatrix() {
+    (async () => {
+      try {
+        this.matrix.clear();
+
+        this.matrix.afterSync((mat, dt, t) => {
+          this.matrix.map(([x, y, i]) => {
+            if (this.map[x][y]) {
+              return 0xFF00FF;
+            }
+            return 0x000000;
+          });
+        });
+
+        this.matrix.sync();
+
+        await wait(ONE_HOUR);
+      } catch(error) {
+        console.log(error);
+      }
+    })();
   }
 
   isValidMove(x, y) {
