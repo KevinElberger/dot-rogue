@@ -1,24 +1,6 @@
-// import { LedMatrix, GpioMapping } from 'rpi-led-matrix';
+import { LedMatrix, GpioMapping } from 'rpi-led-matrix';
 
-export const ONE_HOUR = 3600000;
-
-export const BUTTON = {
-  X: [1, 0, 128, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 8, 0],
-  Y: [1, 0, 128, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 4, 0],
-  B: [1, 0, 128, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 1, 0],
-  A: [1, 0, 128, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 2, 0],
-  // UP: [1, 0, 128, 0, 0, 0, 128, 0, 128, 0, 0, 0, 0, 0, 0, 0], -- 8BitDo
-  // LEFT: [1, 0, 0, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 0, 0], -- 8BitDo
-  // RIGHT: [1, 255, 255, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 0, 0], -- 8BitDo
-  // DOWN: [1, 0, 128, 255, 255, 0, 128, 0, 128, 0, 0, 0, 0, 0, 0, 0], -- 8BitDo
-  UP: [1, 128, 0, 128, 128, 8, 0, 0, 0, 0],
-  LEFT: [1, 0, 128, 128, 128, 8, 0, 0, 0, 0],
-  RIGHT: [1, 255, 128, 128, 128, 8, 0, 0, 0, 0],
-  DOWN: [1, 128, 255, 128, 128, 8, 0, 0, 0, 0],
-  SELECT: [1, 0, 128, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 64, 0],
-  START: [1, 0, 128, 0, 128, 0, 128, 0, 128, 0, 0, 0, 0, 0, 128, 0]
-};
-
+export const ONE_MINUTE = 60000;
 export const TILE_HEIGHT = 1;
 export const TILE_WIDTH = 1;
 export const MAP_WIDTH = 32;
@@ -42,14 +24,9 @@ export const COLORS = {
   yellow: 0xFFFF00,
 };
 
-export const CONTROLLER = {
-  vid: 1118,
-  pid: 736
-};
-
 export const matrixOptions = {
-  // ...LedMatrix.defaultMatrixOptions(),
-  // hardwareMapping: GpioMapping.AdafruitHat,
+  ...LedMatrix.defaultMatrixOptions(),
+  hardwareMapping: GpioMapping.AdafruitHat,
   rows: 32,
   cols: 32,
   chainLength: 1,
@@ -57,6 +34,6 @@ export const matrixOptions = {
 };
 
 export const runtimeOptions = {
-  // ...LedMatrix.defaultRuntimeOptions(),
+  ...LedMatrix.defaultRuntimeOptions(),
   gpioSlowdown: 4,
 };

@@ -1,20 +1,30 @@
 import * as HID from 'node-hid';
-// import { LedMatrix } from 'rpi-led-matrix';
-import { BUTTON, MAP_HEIGHT, MAP_WIDTH, ONE_HOUR } from '../constants.js';
+import { LedMatrix } from 'rpi-led-matrix';
+import {
+  MAP_HEIGHT,
+  MAP_WIDTH,
+  ONE_MINUTE,
+  TILES,
+  COLORS,
+  matrixOptions,
+  runtimeOptions
+} from '../constants.js';
 import Dungeon from './Dungeon.js';
-import { TILES } from '../constants.js';
-import { arraysEqual, getController, getRandomArbitrary } from '../utils.js';
+import {
+  arraysEqual,
+  getRandomArbitrary,
+  wait
+} from '../utils.js';
 import Player from './Player.js';
 
 export default class Game {
   level = 1;
   player = null;
-  controller = null;
   dungeon = null;
   debug = false;
   pi = false;
   gameOver = false;
-  // matrix = new LedMatrix(matrixOptions, runtimeOptions);
+  matrix = new LedMatrix(matrixOptions, runtimeOptions);
   map = Array(MAP_HEIGHT).fill().map(() => Array(MAP_WIDTH));
 
   constructor({ debug } = options) {
@@ -22,38 +32,22 @@ export default class Game {
   }
 
   init() {
-    if (!getController(HID.default.devices())) {
-      return console.log('Controller not found');
-    }
-
     this.dungeon = new Dungeon(this.map).create();
     this.setPlayerLocation();
     this.drawMatrix();
+    
+    setTimeout(() => {
+      this.player.x = this.player.x + 1;
+      this.drawMatrix();
+    }, 2000);
 
     if (this.debug) {
       this.dungeon.drawMap();
     }
-
-    this.controller = new HID.default.HID(getController(HID.default.devices()).path);
-
-    process.on('SIGINT', () => {
-      this.controller.close(); // Prevents holding onto the HID
-    });
-
-    this.controller.on('error', error => {
-      console.log(error);
-      this.controller.close();
-    });
-
-    this.controller.on('data', data => {
-      this.gameTick(data);
-    });
   }
 
-  gameTick(data) {
-    // Buffer stream of bytes: parse & stringify to obtain "data" byte values
-    data = JSON.parse(JSON.stringify(data));
-
+  gameTick() {
+    return;
     const up = arraysEqual(data.data, BUTTON.UP);
     const down = arraysEqual(data.data, BUTTON.DOWN);
     const left = arraysEqual(data.data, BUTTON.LEFT);
@@ -99,16 +93,19 @@ export default class Game {
 
         this.matrix.afterSync((mat, dt, t) => {
           this.matrix.map(([x, y, i]) => {
-            if (this.map[x][y]) {
-              return 0xFF00FF;
+            const player = x === this.player.x && y === this.player.y;
+            if (this.map[x][y] && !player) {
+              return COLORS.cyan;
+            } else if (this.map[x][y] && player) {
+              return COLORS.magenta;
             }
             return 0x000000;
           });
+          
+          setTimeout(() => this.matrix.sync(), 10000);
         });
 
         this.matrix.sync();
-
-        await wait(ONE_HOUR);
       } catch(error) {
         console.log(error);
       }

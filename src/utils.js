@@ -1,5 +1,3 @@
-import { CONTROLLER } from './constants.js';
-
 export const arraysEqual = (a, b) => {
   return !!a && !!b && !(a<b || b<a);
 };
@@ -9,8 +7,3 @@ export const getRandomArbitrary = (min, max) => {
 };
 
 export const wait = t => new Promise(ok => setTimeout(ok, t));
-
-export const getController = devices => devices.find(device => {
-  return device.product === 'DUALSHOCK 4 Wireless Controller';
-  return device.vendorId === CONTROLLER.vid && device.productId === CONTROLLER.pid;
-});
