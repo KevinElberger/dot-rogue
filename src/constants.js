@@ -22,6 +22,7 @@ export const COLORS = {
   magenta: 0xFF00FF,
   cyan: 0x00FFFF,
   yellow: 0xFFFF00,
+  orange: 0xFF8000,
 };
 
 export const matrixOptions = {

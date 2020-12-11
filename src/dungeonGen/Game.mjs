@@ -1,4 +1,3 @@
-import * as HID from 'node-hid';
 import { LedMatrix } from 'rpi-led-matrix';
 import {
   MAP_HEIGHT,
@@ -11,9 +10,7 @@ import {
 } from '../constants.js';
 import Dungeon from './Dungeon.js';
 import {
-  arraysEqual,
   getRandomArbitrary,
-  wait
 } from '../utils.js';
 import Player from './Player.js';
 
@@ -24,6 +21,7 @@ export default class Game {
   debug = false;
   pi = false;
   gameOver = false;
+  matrixTimeout = null;
   matrix = new LedMatrix(matrixOptions, runtimeOptions);
   map = Array(MAP_HEIGHT).fill().map(() => Array(MAP_WIDTH));
 
@@ -35,23 +33,17 @@ export default class Game {
     this.dungeon = new Dungeon(this.map).create();
     this.setPlayerLocation();
     this.drawMatrix();
-    
-    setTimeout(() => {
-      this.player.x = this.player.x + 1;
-      this.drawMatrix();
-    }, 2000);
 
     if (this.debug) {
       this.dungeon.drawMap();
     }
   }
 
-  gameTick() {
-    return;
-    const up = arraysEqual(data.data, BUTTON.UP);
-    const down = arraysEqual(data.data, BUTTON.DOWN);
-    const left = arraysEqual(data.data, BUTTON.LEFT);
-    const right = arraysEqual(data.data, BUTTON.RIGHT);
+  gameTick(direction) {
+    const up = direction === 'up';
+    const down = direction === 'down';
+    const left = direction === 'left';
+    const right = direction === 'right';
     const pos = { x: this.player.x, y: this.player.y };
 
     if (!up && !down && !left && !right) return;
@@ -64,11 +56,16 @@ export default class Game {
     if (this.isValidMove(pos.x, pos.y)) {
       this.movePlayer(pos);
       this.drawMatrix();
+      if (this.debug) {
+        this.dungeon.drawMap();
+      }
+      return true;
     }
+    return false;
   }
 
   setPlayerLocation() {
-    const rng = getRandomArbitrary(0, this.dungeon.rooms.length - 1);
+    const rng = getRandomArbitrary(0, this.dungeon.rooms.length - 2); // omit exit room
     const room = this.dungeon.rooms[rng];
 
     room.startingRoom = true;
@@ -87,29 +84,38 @@ export default class Game {
   }
 
   drawMatrix() {
+    if (this.matrixTimeout) {
+      clearTimeout(this.matrixTimeout);
+    }
+
     (async () => {
       try {
         this.matrix.clear();
-
         this.matrix.afterSync((mat, dt, t) => {
-          this.matrix.map(([x, y, i]) => {
-            const player = x === this.player.x && y === this.player.y;
-            if (this.map[x][y] && !player) {
-              return COLORS.cyan;
-            } else if (this.map[x][y] && player) {
-              return COLORS.magenta;
-            }
-            return 0x000000;
-          });
-          
-          setTimeout(() => this.matrix.sync(), 10000);
+          this.matrix.map(([x, y, i]) => applyColorsToMatrix(x, y));
+          this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_MINUTE);
         });
-
         this.matrix.sync();
       } catch(error) {
         console.log(error);
       }
     })();
+  }
+
+  applyColorsToMatrix(x, y) {
+    const validTile = this.map[x][y];
+    const player = x === this.player.x && y === this.player.y;
+    const emptyTile = validTile && !player;
+    const stairs = this.map[x][y] === TILES.STAIRS;
+
+    if (emptyTile) {
+      return COLORS.cyan;
+    } else if (validTile && player) {
+      return COLORS.magenta;
+    } else if (validTile && stairs) {
+      return COLORS.orange;
+    }
+    return COLORS.black;
   }
 
   isValidMove(x, y) {

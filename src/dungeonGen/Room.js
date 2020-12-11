@@ -8,6 +8,7 @@ export default class Room {
   width;
   height;
   center;
+  exit = false;
   startingRoom = false;
 
   constructor(x, y, width, height) {

@@ -17,6 +17,7 @@ export default class Dungeon {
     while (this.rooms.length < 8) {
       this.createRooms();
     }
+    this.rooms[this.rooms.length - 1].exit = true;
     this.drawRooms();
     return this;
   }
@@ -123,6 +124,10 @@ export default class Dungeon {
             this.map[x][y] = TILES.GROUND;
           }
         }
+      }
+
+      if (room.exit) {
+        this.map[room.center[0]][room.center[1]] = TILES.STAIRS;
       }
     });
   }
