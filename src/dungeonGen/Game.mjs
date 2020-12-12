@@ -92,7 +92,7 @@ export default class Game {
       try {
         this.matrix.clear();
         this.matrix.afterSync((mat, dt, t) => {
-          this.matrix.map(([x, y, i]) => applyColorsToMatrix(x, y));
+          this.matrix.map(([x, y, i]) => this.applyColorsToMatrix(x, y));
           this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_MINUTE);
         });
         this.matrix.sync();
@@ -105,8 +105,8 @@ export default class Game {
   applyColorsToMatrix(x, y) {
     const validTile = this.map[x][y];
     const player = x === this.player.x && y === this.player.y;
-    const emptyTile = validTile && !player;
     const stairs = this.map[x][y] === TILES.STAIRS;
+    const emptyTile = validTile && !player && !stairs;
 
     if (emptyTile) {
       return COLORS.cyan;
