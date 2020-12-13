@@ -1,4 +1,4 @@
-// import { LedMatrix } from 'rpi-led-matrix';
+import { LedMatrix } from 'rpi-led-matrix';
 import {
   MAP_HEIGHT,
   MAP_WIDTH,
@@ -24,7 +24,7 @@ export default class Game {
   mobs = [];
   gameOver = false;
   matrixTimeout = null;
-  matrix = null;// new LedMatrix(matrixOptions, runtimeOptions);
+  matrix = new LedMatrix(matrixOptions, runtimeOptions);
   map = Array(MAP_HEIGHT).fill().map(() => Array(MAP_WIDTH));
 
   constructor({ debug } = options) {
@@ -140,7 +140,6 @@ export default class Game {
   }
 
   drawMatrix() {
-    return; // TODO: REMOVE
     if (this.matrixTimeout) {
       clearTimeout(this.matrixTimeout);
     }
@@ -163,7 +162,8 @@ export default class Game {
     const validTile = this.map[x][y];
     const player = x === this.player.x && y === this.player.y;
     const stairs = this.map[x][y] === TILES.STAIRS;
-    const emptyTile = validTile && !player && !stairs;
+    const mob = this.map[x][y] === TILES.MOB;
+    const emptyTile = validTile && !player && !stairs && !mob;
 
     if (emptyTile) {
       return COLORS.cyan;
@@ -171,6 +171,8 @@ export default class Game {
       return COLORS.magenta;
     } else if (validTile && stairs) {
       return COLORS.orange;
+    } else if (validTile && mob) {
+      return COLORS.red;
     }
     return COLORS.black;
   }
