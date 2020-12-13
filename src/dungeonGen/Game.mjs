@@ -33,9 +33,6 @@ export default class Game {
 
   init() {
     this.createLevel();
-    if (this.debug) {
-      this.dungeon.drawMap();
-    }
   }
 
   gameTick(direction) {
@@ -51,6 +48,9 @@ export default class Game {
 
     if (this.map[pos.x][pos.y] === TILES.MOB) {
       return this.doCombat(pos.x, pos.y);
+    }
+    if (this.map[pos.x][pos.y] === TILES.STAIRS) {
+      return this.createLevel(true);
     }
 
     this.movePlayer(pos);
@@ -129,7 +129,7 @@ export default class Game {
     if (!status.text) {
       const playerText = playerDamage > 0 ? `You attack a mob for ${playerDamage}!` : 'Your attack misses.';
       const mobText = mobDamage > 0 ? `The mob attacks you for ${mobDamage}!` : "You dodge the mob's attack!";
-      status.text = `${playerText}${mobText}`;
+      status.text = `${playerText} ${mobText}`;
       status.player = this.player;
     }
 
@@ -175,16 +175,23 @@ export default class Game {
     return COLORS.black;
   }
 
-  createLevel() {
+  createLevel(isNextLevel) {
     this.level = this.level + 1;
     this.map = Array(MAP_HEIGHT).fill().map(() => Array(MAP_WIDTH));
     this.dungeon = new Dungeon(this.map).create();
     this.setPlayerLocation();
     this.addMobs();
     this.drawMatrix();
+    if (this.debug) {
+      this.dungeon.drawMap();
+    }
+    if (isNextLevel) {
+      return { text: `You have reached level ${this.level} of the dungeon` };
+    }
   }
 
   addMobs() {
+    this.mobs = [];
     const mobCount = getRandomArbitrary(2, 5);
 
     for (let i = 0; i <= mobCount; i++) {
