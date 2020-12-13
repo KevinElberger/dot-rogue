@@ -25,9 +25,7 @@ socketio.on('connection', socket => {
   });
 
   socket.on('move', data => {
-    const move = game.gameTick(data);
-    socket.emit('move', {
-      text: move ? `You move ${data}.` : 'You cannot move there.'
-    });
+    const response = game.gameTick(data);
+    socket.emit('move', response);
   });
 });

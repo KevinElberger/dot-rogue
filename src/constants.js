@@ -1,4 +1,4 @@
-import { LedMatrix, GpioMapping } from 'rpi-led-matrix';
+// import { LedMatrix, GpioMapping } from 'rpi-led-matrix';
 
 export const ONE_MINUTE = 60000;
 export const TILE_HEIGHT = 1;
@@ -11,6 +11,7 @@ export const TILES = {
   GROUND: 'x',
   PLAYER: 'P',
   STAIRS: 'S',
+  MOB: 'M',
   WALL: 2
 };
 
@@ -26,8 +27,8 @@ export const COLORS = {
 };
 
 export const matrixOptions = {
-  ...LedMatrix.defaultMatrixOptions(),
-  hardwareMapping: GpioMapping.AdafruitHat,
+  // ...LedMatrix.defaultMatrixOptions(),
+  // hardwareMapping: GpioMapping.AdafruitHat,
   rows: 32,
   cols: 32,
   chainLength: 1,
@@ -35,6 +36,6 @@ export const matrixOptions = {
 };
 
 export const runtimeOptions = {
-  ...LedMatrix.defaultRuntimeOptions(),
+  // ...LedMatrix.defaultRuntimeOptions(),
   gpioSlowdown: 4,
 };
