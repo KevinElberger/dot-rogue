@@ -7,12 +7,10 @@ export const MAP_WIDTH = 32;
 export const MAP_HEIGHT = 32;
 
 export const TILES = {
-  VOID: ',',
   GROUND: 'x',
   PLAYER: 'P',
   STAIRS: 'S',
   MOB: 'M',
-  WALL: 2
 };
 
 export const COLORS = {
