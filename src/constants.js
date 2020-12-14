@@ -1,5 +1,6 @@
 import { LedMatrix, GpioMapping } from 'rpi-led-matrix';
 
+export const ONE_SECOND = 6000;
 export const ONE_MINUTE = 60000;
 export const TILE_HEIGHT = 1;
 export const TILE_WIDTH = 1;

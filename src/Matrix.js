@@ -2,12 +2,12 @@ import * as globby from 'globby';
 import { basename } from 'path';
 import { Font, LedMatrix } from 'rpi-led-matrix';
 import { linesToMappedGlyphs, textToLines } from './utils.js';
-import { ONE_MINUTE, matrixOptions, runtimeOptions, COLORS } from './constants.js';
+import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND } from './constants.js';
 
 export default class Matrix {
-  timeout = null;
   width = 32;
   height = 32;
+  matrixTimeout = null;
   matrix = new LedMatrix(matrixOptions, runtimeOptions);
 
   async meeting() {
@@ -17,13 +17,18 @@ export default class Matrix {
     const alignmentH = 'center';
     const alignmentV = 'middle';
 
-    console.log(lines);
-
     this.draw(() => {
       linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
         this.matrix.drawText(glyph.char, glyph.x, glyph.y);
       });
     });
+  }
+
+  clear() {
+    if (this.matrixTimeout) {
+      clearTimeout(this.matrixTimeout);
+    }
+    this.matrix.clear();
   }
 
   pulse() {
@@ -66,7 +71,7 @@ export default class Matrix {
         this.matrix.clear();
         this.matrix.afterSync((mat, dt, t) => {
           callback();
-          this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_MINUTE);
+          this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_SECOND);
         });
         this.matrix.sync();
       } catch(error) {

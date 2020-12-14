@@ -24,6 +24,7 @@ socketio.on('connection', socket => {
   socket.on('select', option => {
     if (selected === option) {
       selected = null;
+      matrix.clear();
       return socket.emit('unselected', option);
     }
 
