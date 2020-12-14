@@ -2,7 +2,7 @@ import * as globby from 'globby';
 import { basename } from 'path';
 import { Font, LedMatrix } from 'rpi-led-matrix';
 import { linesToMappedGlyphs, textToLines } from './utils.js';
-import { ONE_MINUTE, matrixOptions, runtimeOptions } from './constants.js';
+import { ONE_MINUTE, matrixOptions, runtimeOptions, COLORS } from './constants.js';
 
 export default class Matrix {
   timeout = null;
@@ -11,23 +11,17 @@ export default class Matrix {
   matrix = new LedMatrix(matrixOptions, runtimeOptions);
 
   meeting() {
-    let render = async() => {
-      this.matrix.clear();
-      const font = await this.loadFont();
-      const fgColor = this.matrix.fgColor();
-      this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(fgColor);
-      const lines = textToLines(font, this.width, 'Hello, matrix!');
-      const alignmentH = 'center';
-      const alignmentV = 'middle';
+    const font = await this.loadFont();
+    this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(COLORS.magenta);
+    const lines = textToLines(font, this.width, 'In a meeting');
+    const alignmentH = 'center';
+    const alignmentV = 'middle';
 
-      this.draw(() => {
-        linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
-          this.matrix.drawText(glyph.char, glyph.x, glyph.y);
-        });
+    this.draw(() => {
+      linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
+        this.matrix.drawText(glyph.char, glyph.x, glyph.y);
       });
-    };
-
-    render();
+    });
   }
 
   pulse() {
