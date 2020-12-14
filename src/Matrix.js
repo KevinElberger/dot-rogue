@@ -16,16 +16,15 @@ export default class Matrix {
       const font = await this.loadFont();
       const fgColor = this.matrix.fgColor();
       this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(fgColor);
-      // const font = this.matrix.font();
-      console.log(font.height());
       const lines = textToLines(font, this.width, 'Hello, matrix!');
       const alignmentH = 'center';
       const alignmentV = 'middle';
 
-      linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
-        this.matrix.drawText(glyph.char, glyph.x, glyph.y);
+      this.draw(() => {
+        linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
+          this.matrix.drawText(glyph.char, glyph.x, glyph.y);
+        });
       });
-      this.matrix.sync();
     };
 
     render();
