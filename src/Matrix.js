@@ -1,3 +1,4 @@
+import { basename } from 'path';
 import { Font, LedMatrix } from 'rpi-led-matrix';
 import { linesToMappedGlyphs, textToLines } from './utils.js';
 import { ONE_MINUTE, matrixOptions, runtimeOptions } from './constants.js';
@@ -47,9 +48,21 @@ export default class Matrix {
     });
   }
 
-  loadFont() {
-    const font = new Font('5x8.bdf', '../fonts/');
-    this.matrix.font(font);
+  async loadFont() {
+    const fontExt = '.bdf';
+    const fontList = (await globby(`${process.cwd()}/fonts/*${fontExt}`))
+      .filter(path => !Number.isSafeInteger(+basename(path, fontExt)[0]))
+      .map(path => {
+        const name = basename(path, fontExt);
+        const font = new Font(basename(path, fontExt), path);
+        return font;
+      });
+
+    if (fontList.length < 1) {
+      throw new Error(`No fonts were loaded!`);
+    } else {
+      this.matrix.clear().font(font).sync();
+    }
   }
 
   draw(callback) {
