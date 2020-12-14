@@ -1,3 +1,4 @@
+import * as globby from 'globby';
 import { basename } from 'path';
 import { Font, LedMatrix } from 'rpi-led-matrix';
 import { linesToMappedGlyphs, textToLines } from './utils.js';
@@ -57,6 +58,8 @@ export default class Matrix {
         const font = new Font(basename(path, fontExt), path);
         return font;
       });
+
+    console.log(fontList);
 
     if (fontList.length < 1) {
       throw new Error(`No fonts were loaded!`);

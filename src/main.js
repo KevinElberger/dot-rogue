@@ -6,14 +6,12 @@ import Game from './dungeonGen/Game.mjs';
 import Matrix from './Matrix.js';
 
 const app = express();
+let game = null;
 const matrix = new Matrix();
-const game = new Game({ debug: true });
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-game.init();
 
 const httpServer = http.createServer(app);
 const socketio = io(httpServer);
@@ -32,6 +30,8 @@ socketio.on('connection', socket => {
     selected = option;
 
     if (option === 'game') {
+      game = new Game({ debug: true });
+      game.init();
       return socket.emit('init', {
         level: game.level,
         player: game.player
