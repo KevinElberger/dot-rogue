@@ -81,8 +81,11 @@ export default class Matrix {
       try {
         this.matrix.clear();
         this.matrix.afterSync((mat, dt, t) => {
-          if (!this.stop) callback();
-          this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_SECOND);
+          if (!this.stop) {
+            console.log(this.stop);
+            callback();
+            this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_SECOND);
+          }
         });
         this.matrix.sync();
       } catch(error) {
