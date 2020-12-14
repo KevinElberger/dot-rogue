@@ -13,10 +13,10 @@ export default class Matrix {
   meeting() {
     let render = async() => {
       this.matrix.clear();
-      await this.loadFont();
+      const font = await this.loadFont();
       const fgColor = this.matrix.fgColor();
       this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(fgColor);
-      const font = this.matrix.font();
+      // const font = this.matrix.font();
       console.log(font);
       const lines = textToLines(font, this.width, 'Hello, matrix!');
       const alignmentH = 'center';
@@ -57,6 +57,8 @@ export default class Matrix {
     } else {
       this.matrix.clear().font(fontList[0]).sync();
     }
+
+    return fontList[0];
   }
 
   draw(callback) {
