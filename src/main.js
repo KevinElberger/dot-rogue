@@ -3,7 +3,7 @@ import http from 'http';
 import cors from 'cors';
 import io from 'socket.io';
 import Game from './dungeonGen/Game.mjs';
-import Matrix from './Matrix';
+import Matrix from './Matrix.js';
 
 const app = express();
 const matrix = new Matrix();
