@@ -51,8 +51,9 @@ export default class Matrix {
 
   async loadFont() {
     const fontExt = '.bdf';
+    console.log(`${process.cwd()}/fonts/*${fontExt}`);
     const fontList = (await globby.default(`${process.cwd()}/fonts/*${fontExt}`))
-      .filter(path => !Number.isSafeInteger(+basename(path, fontExt)[0]))
+      // .filter(path => !Number.isSafeInteger(+basename(path, fontExt)[0]))
       .map(path => {
         const name = basename(path, fontExt);
         const font = new Font(basename(path, fontExt), path);
