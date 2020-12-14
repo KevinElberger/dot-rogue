@@ -7,7 +7,7 @@ import Matrix from './Matrix.js';
 
 const app = express();
 let game = null;
-const matrix = new Matrix();
+let matrix = null;
 
 app.use(cors());
 app.use(express.json());
@@ -30,7 +30,7 @@ socketio.on('connection', socket => {
     }
 
     if (option === 'meeting') {
-      matrix.start();
+      matrix = new Matrix();
       matrix.meeting();
     }
     if (option === 'clock') {
@@ -39,7 +39,7 @@ socketio.on('connection', socket => {
   });
 
   socket.on('clear', () => {
-    matrix.clear();
+    matrix = null;
   });
 
   socket.on('move', data => {

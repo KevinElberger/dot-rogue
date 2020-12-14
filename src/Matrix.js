@@ -19,28 +19,13 @@ export default class Matrix {
     const alignmentV = 'middle';
 
     this.draw(() => {
-      if (this.stop) return this.matrix.clear();
       linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
         this.matrix.drawText(glyph.char, glyph.x, glyph.y);
       });
     });
   }
 
-  clear() {
-    if (this.matrixTimeout) {
-      clearTimeout(this.matrixTimeout);
-    }
-    this.stop = true;
-    this.matrix.clear();
-  }
-
-  start() {
-    this.stop = false;
-  }
-
   pulse() {
-    if (this.stop) return;
-
     const pulsers = [];
 
     for (let x = 0; x < matrix.width(); x++) {
@@ -75,18 +60,12 @@ export default class Matrix {
       clearTimeout(this.matrixTimeout);
     }
 
-    if (this.stop) return this.matrix.clear();
-
     (async () => {
       try {
         this.matrix.clear();
         this.matrix.afterSync((mat, dt, t) => {
-          if (!this.stop) {
-            callback();
-            this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_SECOND);
-          } else {
-            this.matrix.clear();
-          }
+          callback();
+          this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_SECOND);
         });
         this.matrix.sync();
       } catch(error) {
