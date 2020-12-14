@@ -65,7 +65,7 @@ export default class Matrix {
     if (fontList.length < 1) {
       throw new Error(`No fonts were loaded!`);
     } else {
-      this.matrix.clear().font(font).sync();
+      this.matrix.clear().font(fontList[0]).sync();
     }
   }
 
