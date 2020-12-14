@@ -85,6 +85,8 @@ export default class Matrix {
             console.log(this.stop);
             callback();
             this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_SECOND);
+          } else {
+            this.matrix.clear();
           }
         });
         this.matrix.sync();
