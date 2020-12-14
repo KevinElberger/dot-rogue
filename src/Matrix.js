@@ -17,6 +17,7 @@ export default class Matrix {
       const fgColor = this.matrix.fgColor();
       this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(fgColor);
       const font = this.matrix.font();
+      console.log(font);
       const lines = textToLines(font, this.width, 'Hello, matrix!');
       const alignmentH = 'center';
       const alignmentV = 'middle';
