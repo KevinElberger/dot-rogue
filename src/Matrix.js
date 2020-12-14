@@ -19,6 +19,7 @@ export default class Matrix {
     const alignmentV = 'middle';
 
     this.draw(() => {
+      if (this.stop) return;
       linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
         this.matrix.drawText(glyph.char, glyph.x, glyph.y);
       });

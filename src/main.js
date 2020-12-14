@@ -32,7 +32,6 @@ socketio.on('connection', socket => {
     if (option === 'meeting') {
       matrix.start();
       matrix.meeting();
-      console.log('meeting()');
     }
     if (option === 'clock') {
       // matrix.clock();
@@ -40,7 +39,6 @@ socketio.on('connection', socket => {
   });
 
   socket.on('clear', () => {
-    console.log('clear()');
     matrix.clear();
   });
 
