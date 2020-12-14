@@ -66,14 +66,14 @@ const glyphsToWords = (glyphs) => {
 
 const calcWordWidth = (gs) => gs.reduce((sum, { w }) => sum + w, 0);
 const VerticalAlignment = {
-  Bottom = 'bottom',
-  Middle = 'middle',
-  Top = 'top',
+  Bottom: 'bottom',
+  Middle: 'middle',
+  Top: 'top',
 };
 const HorizontalAlignment = {
-  Left = 'left',
-  Center = 'center',
-  Right = 'right',
+  Left: 'left',
+  Center: 'center',
+  Right: 'right',
 };
 
 export const linesToMappedGlyphs = (
