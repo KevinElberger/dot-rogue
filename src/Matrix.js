@@ -28,8 +28,8 @@ export default class Matrix {
     if (this.matrixTimeout) {
       clearTimeout(this.matrixTimeout);
     }
-    this.matrix.clear();
     this.matrix.sync();
+    this.matrix.clear();
   }
 
   pulse() {
@@ -72,7 +72,7 @@ export default class Matrix {
         this.matrix.clear();
         this.matrix.afterSync((mat, dt, t) => {
           callback();
-          this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_SECOND);
+          this.matrixTimeout = setTimeout(() => this.matrix.sync(), 0);
         });
         this.matrix.sync();
       } catch(error) {
