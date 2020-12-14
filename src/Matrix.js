@@ -10,13 +10,10 @@ export default class Matrix {
   height = 32;
   matrix = new LedMatrix(matrixOptions, runtimeOptions);
 
-  constructor() {
-    this.loadFont();
-  }
-
   meeting() {
-    let render = () => {
+    let render = async() => {
       this.matrix.clear();
+      await this.loadFont();
       const fgColor = this.matrix.fgColor();
       this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(fgColor);
       const font = fonts[this.matrix.font()];
@@ -51,16 +48,8 @@ export default class Matrix {
 
   async loadFont() {
     const fontExt = '.bdf';
-    console.log(`${process.cwd()}/fonts/*${fontExt}`);
     const fontList = (await globby.default(`${process.cwd()}/fonts/*${fontExt}`))
-      // .filter(path => !Number.isSafeInteger(+basename(path, fontExt)[0]))
-      .map(path => {
-        const name = basename(path, fontExt);
-        const font = new Font(basename(path, fontExt), path);
-        return font;
-      });
-
-    console.log(fontList);
+      .map(path => new Font(basename(path, fontExt), path));
 
     if (fontList.length < 1) {
       throw new Error(`No fonts were loaded!`);
