@@ -19,7 +19,7 @@ export default class Matrix {
     const alignmentV = 'middle';
 
     this.draw(() => {
-      if (this.stop) return;
+      if (this.stop) return this.matrix.clear();
       linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
         this.matrix.drawText(glyph.char, glyph.x, glyph.y);
       });
@@ -75,14 +75,13 @@ export default class Matrix {
       clearTimeout(this.matrixTimeout);
     }
 
-    if (this.stop) return;
+    if (this.stop) return this.matrix.clear();
 
     (async () => {
       try {
         this.matrix.clear();
         this.matrix.afterSync((mat, dt, t) => {
           if (!this.stop) {
-            console.log(this.stop);
             callback();
             this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_SECOND);
           } else {
