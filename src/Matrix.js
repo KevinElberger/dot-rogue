@@ -7,6 +7,7 @@ import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND } from './constants.j
 export default class Matrix {
   width = 32;
   height = 32;
+  stop = false;
   matrixTimeout = null;
   matrix = new LedMatrix(matrixOptions, runtimeOptions);
 
@@ -28,11 +29,17 @@ export default class Matrix {
     if (this.matrixTimeout) {
       clearTimeout(this.matrixTimeout);
     }
-    this.matrix.sync();
+    this.stop = true;
     this.matrix.clear();
   }
 
+  start() {
+    this.stop = false;
+  }
+
   pulse() {
+    if (this.stop) return;
+
     const pulsers = [];
 
     for (let x = 0; x < matrix.width(); x++) {
@@ -67,12 +74,14 @@ export default class Matrix {
       clearTimeout(this.matrixTimeout);
     }
 
+    if (this.stop) return;
+
     (async () => {
       try {
         this.matrix.clear();
         this.matrix.afterSync((mat, dt, t) => {
           callback();
-          this.matrixTimeout = setTimeout(() => this.matrix.sync(), 0);
+          this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_SECOND);
         });
         this.matrix.sync();
       } catch(error) {

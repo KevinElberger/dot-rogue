@@ -30,6 +30,7 @@ socketio.on('connection', socket => {
     }
 
     if (option === 'meeting') {
+      matrix.start();
       matrix.meeting();
     }
     if (option === 'clock') {
