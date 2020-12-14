@@ -80,7 +80,7 @@ export default class Matrix {
       try {
         this.matrix.clear();
         this.matrix.afterSync((mat, dt, t) => {
-          callback();
+          if (!this.stop) callback();
           this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_SECOND);
         });
         this.matrix.sync();
