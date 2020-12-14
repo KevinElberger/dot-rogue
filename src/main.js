@@ -18,18 +18,8 @@ const socketio = io(httpServer);
 
 httpServer.listen(1337);
 
-let selected = null;
-
 socketio.on('connection', socket => {
   socket.on('select', option => {
-    if (selected === option) {
-      selected = null;
-      matrix.clear();
-      return socket.emit('unselected', option);
-    }
-
-    selected = option;
-
     if (option === 'game') {
       game = new Game({ debug: true });
       game.init();
@@ -45,6 +35,10 @@ socketio.on('connection', socket => {
     if (option === 'clock') {
       // matrix.clock();
     }
+  });
+
+  socket.on('clear', () => {
+    matrix.clear();
   });
 
   socket.on('move', data => {

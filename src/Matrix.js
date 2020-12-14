@@ -29,6 +29,7 @@ export default class Matrix {
       clearTimeout(this.matrixTimeout);
     }
     this.matrix.clear();
+    this.matrix.sync();
   }
 
   pulse() {
