@@ -10,7 +10,7 @@ export default class Matrix {
   height = 32;
   matrix = new LedMatrix(matrixOptions, runtimeOptions);
 
-  meeting() {
+  async meeting() {
     const font = await this.loadFont();
     this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(COLORS.magenta);
     const lines = textToLines(font, this.width, 'In a meeting');
