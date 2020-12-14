@@ -13,9 +13,11 @@ export default class Matrix {
   async meeting() {
     const font = await this.loadFont();
     this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(COLORS.magenta);
-    const lines = textToLines(font, this.width, 'In a meeting');
+    const lines = textToLines(font, this.width, 'In a mtg :(');
     const alignmentH = 'center';
     const alignmentV = 'middle';
+
+    console.log(lines);
 
     this.draw(() => {
       linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
