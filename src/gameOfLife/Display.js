@@ -1,5 +1,5 @@
 import { LedMatrix } from 'rpi-led-matrix';
-import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND } from './constants.js';
+import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND } from '../constants.js';
 
 export default class Display {
   display = new LedMatrix(matrixOptions, runtimeOptions);
