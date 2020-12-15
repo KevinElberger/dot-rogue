@@ -40,9 +40,7 @@ socketio.on('connection', socket => {
 
   socket.on('clear', () => {
     console.log('clear()');
-    console.log(matrix);
-    console.log(matrix.stop);
-    matrix.stop();
+    matrix.stopMatrix();
   });
 
   socket.on('move', data => {

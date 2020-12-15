@@ -43,8 +43,9 @@ export default class Matrix {
     return !this.stop;
   }
 
-  stop() {
+  stopMatrix() {
     this.stop = true;
+    if (this.matrixTimeout) clearTimeout(this.matrixTimeout);
   }
 
   pulse() {
