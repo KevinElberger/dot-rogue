@@ -19,7 +19,7 @@ export default class GameOfLife {
       }
     }
     this.cells = this.initialCells;
-    this.display.update(this.cells);
+    this.display.updateCells(this.cells);
   }
 
   nextGenCells() {
