@@ -18,11 +18,33 @@ export default class Matrix {
     const alignmentH = 'center';
     const alignmentV = 'middle';
 
-    this.draw(() => {
-      linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
-        this.matrix.drawText(glyph.char, glyph.x, glyph.y);
-      });
-    });
+    (async () => {
+      try {
+        this.matrix.clear();
+        this.matrix.afterSync((mat, dt, t) => {
+          if (!this.canDraw()) return;
+          linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
+            this.matrix.drawText(glyph.char, glyph.x, glyph.y);
+          });
+          this.matrixTimeout = setTimeout(() => {
+            if (this.canDraw()) {
+              this.matrix.sync();
+            }
+          }, ONE_SECOND);
+        });
+        this.matrix.sync();
+      } catch(error) {
+        console.log(error);
+      }
+    })();
+  }
+
+  canDraw() {
+    return !this.stop;
+  }
+
+  stop() {
+    this.stop = true;
   }
 
   pulse() {

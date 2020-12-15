@@ -39,7 +39,7 @@ socketio.on('connection', socket => {
   });
 
   socket.on('clear', () => {
-    matrix = null;
+    matrix.stop();
   });
 
   socket.on('move', data => {
