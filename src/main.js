@@ -33,14 +33,17 @@ socketio.on('connection', socket => {
       matrix = new Matrix();
       matrix.meeting();
     }
+    if (option === 'pulse') {
+
+    }
     if (option === 'clock') {
-      // matrix.clock();
+      matrix.clock();
     }
   });
 
   socket.on('clear', () => {
-    console.log('clear()');
     matrix.stopMatrix();
+    socket.emit('unselected');
   });
 
   socket.on('move', data => {

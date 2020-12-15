@@ -7,7 +7,6 @@ import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND } from './constants.j
 export default class Matrix {
   width = 32;
   height = 32;
-  stop = false;
   matrix = new LedMatrix(matrixOptions, runtimeOptions);
 
   async meeting() {
@@ -24,9 +23,7 @@ export default class Matrix {
           linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
             this.matrix.drawText(glyph.char, glyph.x, glyph.y);
           });
-          setTimeout(() => {
-            this.canDraw() ? this.matrix.sync() : this.matrix.clear();
-          }, ONE_SECOND);
+          setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
         });
         this.matrix.sync();
       } catch(error) {
@@ -35,12 +32,7 @@ export default class Matrix {
     })();
   }
 
-  canDraw() {
-    return !this.stop;
-  }
-
   stopMatrix() {
-    this.stop = true;
     this.matrix.clear().sync();
   }
 
@@ -53,11 +45,68 @@ export default class Matrix {
       }
     }
 
-    this.draw(() => {
-      pulsers.map(pulser => {
-        matrix.fgColor(pulser.nextColor(t)).setPixel(pulser.x, pulser.y);
+    try {
+      this.matrix.clear();
+      this.matrix.afterSync((mat, dt, t) => {
+        pulsers.map(pulser => {
+          matrix.fgColor(pulser.nextColor(t)).setPixel(pulser.x, pulser.y);
+        });
+        setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
       });
-    });
+      this.matrix.sync();
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  clock() {
+    let time;
+    const date = new Date();
+    const minutes = date.getMinutes();
+    const hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+    const hourMap = {
+      1: 'one',
+      2: 'two',
+      3: 'three',
+      4: 'four',
+      5: 'five',
+      6: 'six',
+      7: 'seven',
+      8: 'eight',
+      9: 'nine',
+      10: 'ten',
+      11: 'eleven',
+      12: 'twelve'
+    };
+    const minutesSpelled = ["o' clock", 'quarter past', 'thirty', 'quarter til'];
+
+    if (minutes < 15) {
+      time = `${hourMap[hours]} ${minutesSpelled[0]}`;
+    } else if (minutes >= 15 || minutes < 30) {
+      time = `${minutesSpelled[1]} ${hourMap[hours]}`;
+    } else if (minutes >= 30 || minutes < 45) {
+      time = `${hourMap[hours]} ${minutesSpelled[2]}`;
+    } else if (minutes >= 45) {
+      time = `${minutesSpelled[3]} ${hourMap[hours]}`;
+    }
+    const font = await this.loadFont();
+    this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(COLORS.blue);
+    const lines = textToLines(font, this.width, time);
+    const alignmentH = 'center';
+    const alignmentV = 'middle';
+
+    try {
+      this.matrix.clear();
+      this.matrix.afterSync((mat, dt, t) => {
+        linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
+          this.matrix.drawText(glyph.char, glyph.x, glyph.y);
+        });
+        setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
+      });
+      this.matrix.sync();
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   async loadFont() {
