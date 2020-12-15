@@ -76,6 +76,7 @@ export default class Matrix {
     try {
       this.matrix.clear();
       this.matrix.afterSync((mat, dt, t) => {
+        this.matrix.clear();
         const time = this.getTime();
         const lines = textToLines(font, this.width, time);
         linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
@@ -120,7 +121,6 @@ export default class Matrix {
       time = `${minutesSpelled[3]} ${hourMap[hours]}`;
     }
 
-    return minutes.toString();
     return time;
   }
 
