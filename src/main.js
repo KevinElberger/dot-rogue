@@ -43,7 +43,7 @@ socketio.on('connection', socket => {
     }
     if (option === 'game of life') {
       gameOfLife = new GameOfLife(randomGameOfLife());
-      setInterval(gameOfLife.step, 1000);
+      setInterval(() => gameOfLife.step(), 1000);
     }
   });
 
