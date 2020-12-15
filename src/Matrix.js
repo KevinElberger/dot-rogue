@@ -7,6 +7,7 @@ import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND, ONE_MINUTE } from '.
 export default class Matrix {
   width = 32;
   height = 32;
+  drawClock = false;
   drawMeeting = false;
   matrix = new LedMatrix(matrixOptions, runtimeOptions);
 
@@ -40,6 +41,7 @@ export default class Matrix {
   }
 
   stopMatrix() {
+    this.drawClock = false;
     this.drawMeeting = false;
     this.matrix.clear().sync();
   }
@@ -68,22 +70,28 @@ export default class Matrix {
   }
 
   async clock() {
+    this.drawClock = true;
+
     const font = await this.loadFont();
     this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(COLORS.blue);
     const alignmentH = 'center';
     const alignmentV = 'top';
 
-    try {
-      this.matrix.clear();
-      this.matrix.afterSync((mat, dt, t) => {
+    const drawClockText = (mat, dt, t) => {
+      if (this.drawClock) {
         this.matrix.clear();
         const time = this.getTime();
         const lines = textToLines(font, this.width, time);
         linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
           this.matrix.drawText(glyph.char, glyph.x, glyph.y);
         });
-        this.timeout = setTimeout(() => { this.matrix.sync() }, ONE_MINUTE);
-      });
+        setTimeout(() => { this.matrix.sync() }, ONE_MINUTE);
+      }
+    };
+
+    try {
+      this.matrix.clear();
+      this.matrix.afterSync(drawClockText);
       this.matrix.sync();
     } catch(error) {
       console.log(error);
@@ -113,9 +121,9 @@ export default class Matrix {
 
     if (minutes < 15) {
       time = `${hourMap[hours]} ${minutesSpelled[0]}`;
-    } else if (minutes >= 15 || minutes < 30) {
+    } else if (minutes >= 15 && minutes < 30) {
       time = `${minutesSpelled[1]} ${hourMap[hours]}`;
-    } else if (minutes >= 30 || minutes < 45) {
+    } else if (minutes >= 30 && minutes < 45) {
       time = `${hourMap[hours]} ${minutesSpelled[2]}`;
     } else if (minutes >= 45) {
       time = `${minutesSpelled[3]} ${hourMap[hours]}`;
