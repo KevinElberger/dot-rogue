@@ -2,11 +2,12 @@ import * as globby from 'globby';
 import { basename } from 'path';
 import { Font, LedMatrix } from 'rpi-led-matrix';
 import { linesToMappedGlyphs, textToLines } from './utils.js';
-import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND } from './constants.js';
+import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND, ONE_MINUTE } from './constants.js';
 
 export default class Matrix {
   width = 32;
   height = 32;
+  timeout = null;
   matrix = new LedMatrix(matrixOptions, runtimeOptions);
 
   async meeting() {
@@ -16,6 +17,8 @@ export default class Matrix {
     const alignmentH = 'center';
     const alignmentV = 'middle';
 
+    var thatTimeout = this.timeout;
+
     (async () => {
       try {
         this.matrix.clear();
@@ -23,7 +26,7 @@ export default class Matrix {
           linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
             this.matrix.drawText(glyph.char, glyph.x, glyph.y);
           });
-          setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
+          thatTimeout = setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
         });
         this.matrix.sync();
       } catch(error) {
@@ -33,6 +36,7 @@ export default class Matrix {
   }
 
   stopMatrix() {
+    if (this.timeout) clearTimeout(this.timeout);
     this.matrix.clear().sync();
   }
 
@@ -73,7 +77,7 @@ export default class Matrix {
         linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
           this.matrix.drawText(glyph.char, glyph.x, glyph.y);
         });
-        setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
+        this.timeout = setTimeout(() => { this.matrix.sync() }, ONE_MINUTE);
       });
       this.matrix.sync();
     } catch(error) {
@@ -112,6 +116,7 @@ export default class Matrix {
       time = `${minutesSpelled[3]} ${hourMap[hours]}`;
     }
 
+    return minutes;
     return time;
   }
 
