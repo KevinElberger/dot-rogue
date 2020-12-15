@@ -78,7 +78,7 @@ export default class Matrix {
       11: 'eleven',
       12: 'twelve'
     };
-    const minutesSpelled = ["o' clock", 'quarter past', 'thirty', 'quarter til'];
+    const minutesSpelled = ["o' clock", 'qtr past', 'thirty', 'qtr til'];
 
     if (minutes < 15) {
       time = `${hourMap[hours]} ${minutesSpelled[0]}`;
@@ -93,7 +93,7 @@ export default class Matrix {
     this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(COLORS.blue);
     const lines = textToLines(font, this.width, time);
     const alignmentH = 'center';
-    const alignmentV = 'middle';
+    const alignmentV = 'top';
 
     try {
       this.matrix.clear();
