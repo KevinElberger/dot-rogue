@@ -40,7 +40,7 @@ export default class Matrix {
   }
 
   stopMatrix() {
-    drawMeeting = false;
+    this.drawMeeting = false;
     this.matrix.clear().sync();
   }
 
