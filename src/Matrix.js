@@ -8,7 +8,6 @@ export default class Matrix {
   width = 32;
   height = 32;
   stop = false;
-  matrixTimeout = null;
   matrix = new LedMatrix(matrixOptions, runtimeOptions);
 
   async meeting() {
@@ -47,7 +46,6 @@ export default class Matrix {
 
   stopMatrix() {
     this.stop = true;
-    if (this.matrixTimeout) clearTimeout(this.matrixTimeout);
   }
 
   pulse() {
@@ -78,24 +76,5 @@ export default class Matrix {
     }
 
     return fontList[0];
-  }
-
-  draw(callback) {
-    if (this.matrixTimeout) {
-      clearTimeout(this.matrixTimeout);
-    }
-
-    (async () => {
-      try {
-        this.matrix.clear();
-        this.matrix.afterSync((mat, dt, t) => {
-          callback();
-          this.matrixTimeout = setTimeout(() => this.matrix.sync(), ONE_SECOND);
-        });
-        this.matrix.sync();
-      } catch(error) {
-        console.log(error);
-      }
-    })();
   }
 }
