@@ -1,4 +1,4 @@
-import { MAP_HEIGHT, MAP_WIDTH } from "./constants";
+import { MAP_HEIGHT, MAP_WIDTH } from "./constants.js";
 
 export const getRandomArbitrary = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min);
