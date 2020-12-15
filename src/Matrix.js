@@ -59,7 +59,7 @@ export default class Matrix {
     }
   }
 
-  clock() {
+  async clock() {
     let time;
     const date = new Date();
     const minutes = date.getMinutes();
