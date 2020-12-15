@@ -2,7 +2,7 @@ import * as globby from 'globby';
 import { basename } from 'path';
 import { Font, LedMatrix } from 'rpi-led-matrix';
 import { linesToMappedGlyphs, textToLines } from './utils.js';
-import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND, ONE_MINUTE } from './constants.js';
+import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND } from './constants.js';
 
 export default class Matrix {
   width = 32;
@@ -126,7 +126,8 @@ export default class Matrix {
     } else if (minutes >= 30 && minutes < 45) {
       time = `${hourMap[hours]} ${minutesSpelled[2]}`;
     } else if (minutes >= 45) {
-      time = `${minutesSpelled[3]} ${hourMap[hours]}`;
+      const hour = hourMap[hours] === 12 ? 1 : hourMap[hours + 1];
+      time = `${minutesSpelled[3]} ${hour}`;
     }
 
     return time;
