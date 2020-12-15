@@ -5,7 +5,7 @@ import io from 'socket.io';
 import Game from './dungeonGen/Game.mjs';
 import Matrix from './Matrix.js';
 import GameOfLife from './gameOfLife/GameOfLife.js';
-import { randomGameOfLife } from './utils';
+import { randomGameOfLife } from './utils.js';
 
 const app = express();
 var game = null;
