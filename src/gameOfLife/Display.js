@@ -23,10 +23,11 @@ export default class Display {
   }
 
   drawCells(map) {
+    console.log(map);
     const drawGameOfLife = (mat, dt, t) => {
       this.display.clear();
       map.map(([x, y, i]) => {
-        if (map[x][y].getState() === 'alive') {
+        if (map[y][x].getState() === 'alive') {
           return COLORS.blue;
         }
         return COLORS.black;
