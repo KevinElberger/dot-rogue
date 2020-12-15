@@ -41,6 +41,7 @@ export default class Matrix {
 
   stopMatrix() {
     this.stop = true;
+    this.matrix.clear().sync();
   }
 
   pulse() {
