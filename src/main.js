@@ -6,8 +6,8 @@ import Game from './dungeonGen/Game.mjs';
 import Matrix from './Matrix.js';
 
 const app = express();
-let game = null;
-let matrix = null;
+var game = null;
+var matrix = null;
 
 app.use(cors());
 app.use(express.json());
@@ -39,6 +39,9 @@ socketio.on('connection', socket => {
   });
 
   socket.on('clear', () => {
+    console.log('clear()');
+    console.log(matrix);
+    console.log(matrix.stop);
     matrix.stop();
   });
 
