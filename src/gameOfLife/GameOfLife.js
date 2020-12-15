@@ -36,7 +36,7 @@ export default class GameOfLife {
         const rowBelow = (y + 1 <= lengthY - 1) ? y + 1 : 0;
         const colLeft = (x - 1 >= 0) ? x - 1 : lengthX - 1;
         const colRight = (x + 1 <= lengthX - 1) ? x + 1 : 0;
-        const neighbours = {
+        const neighbors = {
           topLeft: currentGen[rowAbove][colLeft].clone(),
           topCenter: currentGen[rowAbove][x].clone(),
           topRight: currentGen[rowAbove][colRight].clone(),

@@ -24,7 +24,7 @@ export default class Display {
 
   drawCells(map) {
     const drawGameOfLife = (mat, dt, t) => {
-      this.matrix.clear();
+      this.display.clear();
       map.map(([x, y, i]) => {
         if (map[x][y].getState() === 'alive') {
           return COLORS.blue;
@@ -32,7 +32,7 @@ export default class Display {
         return COLORS.black;
       });
 
-      setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
+      setTimeout(() => { this.display.sync() }, ONE_SECOND);
     };
 
     try {
