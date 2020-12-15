@@ -21,16 +21,11 @@ export default class Matrix {
       try {
         this.matrix.clear();
         this.matrix.afterSync((mat, dt, t) => {
-          if (!this.canDraw()) return;
           linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
             this.matrix.drawText(glyph.char, glyph.x, glyph.y);
           });
           setTimeout(() => {
-            console.log(this);
-            console.log(this.canDraw());
-            if (this.canDraw()) {
-              this.matrix.sync();
-            }
+            this.canDraw() ? this.matrix.sync() : this.matrix.clear();
           }, ONE_SECOND);
         });
         this.matrix.sync();
