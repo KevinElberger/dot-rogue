@@ -4,7 +4,7 @@ import cors from 'cors';
 import io from 'socket.io';
 import Game from './dungeonGen/Game.mjs';
 import Matrix from './Matrix.js';
-import GameOfLife from './gameOfLife/GameOfLife';
+import GameOfLife from './gameOfLife/GameOfLife.js';
 import { randomGameOfLife } from './utils';
 
 const app = express();

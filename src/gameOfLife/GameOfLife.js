@@ -1,5 +1,5 @@
-import Cell from "./Cell";
-import Display from "./Display";
+import Cell from "./Cell.js";
+import Display from "./Display.js";
 
 export default class GameOfLife {
   display = new Display();
