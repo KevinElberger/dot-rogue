@@ -7,27 +7,31 @@ import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND, ONE_MINUTE } from '.
 export default class Matrix {
   width = 32;
   height = 32;
-  timeout = null;
+  drawMeeting = false;
   matrix = new LedMatrix(matrixOptions, runtimeOptions);
 
   async meeting() {
+    this.drawMeeting = true;
+
     const font = await this.loadFont();
     this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(COLORS.magenta);
     const lines = textToLines(font, this.width, 'In a mtg');
     const alignmentH = 'center';
     const alignmentV = 'middle';
 
-    var thatTimeout = this.timeout;
+    const drawMeetingText = (mat, dt, t) => {
+      if (this.drawMeeting) {
+        linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
+          this.matrix.drawText(glyph.char, glyph.x, glyph.y);
+        });
+        setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
+      }
+    };
 
     (async () => {
       try {
         this.matrix.clear();
-        this.matrix.afterSync((mat, dt, t) => {
-          linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
-            this.matrix.drawText(glyph.char, glyph.x, glyph.y);
-          });
-          thatTimeout = setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
-        });
+        this.matrix.afterSync(drawMeetingText);
         this.matrix.sync();
       } catch(error) {
         console.log(error);
@@ -36,7 +40,7 @@ export default class Matrix {
   }
 
   stopMatrix() {
-    if (this.timeout) clearTimeout(this.timeout);
+    drawMeeting = false;
     this.matrix.clear().sync();
   }
 
@@ -116,7 +120,7 @@ export default class Matrix {
       time = `${minutesSpelled[3]} ${hourMap[hours]}`;
     }
 
-    return minutes;
+    return minutes.toString();
     return time;
   }
 
