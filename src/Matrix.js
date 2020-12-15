@@ -60,6 +60,28 @@ export default class Matrix {
   }
 
   async clock() {
+    const font = await this.loadFont();
+    this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(COLORS.blue);
+    const alignmentH = 'center';
+    const alignmentV = 'top';
+
+    try {
+      this.matrix.clear();
+      this.matrix.afterSync((mat, dt, t) => {
+        const time = this.getTime();
+        const lines = textToLines(font, this.width, time);
+        linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
+          this.matrix.drawText(glyph.char, glyph.x, glyph.y);
+        });
+        setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
+      });
+      this.matrix.sync();
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  getTime() {
     let time;
     const date = new Date();
     const minutes = date.getMinutes();
@@ -89,24 +111,8 @@ export default class Matrix {
     } else if (minutes >= 45) {
       time = `${minutesSpelled[3]} ${hourMap[hours]}`;
     }
-    const font = await this.loadFont();
-    this.matrix.fgColor(this.matrix.bgColor()).fill().fgColor(COLORS.blue);
-    const lines = textToLines(font, this.width, time);
-    const alignmentH = 'center';
-    const alignmentV = 'top';
 
-    try {
-      this.matrix.clear();
-      this.matrix.afterSync((mat, dt, t) => {
-        linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
-          this.matrix.drawText(glyph.char, glyph.x, glyph.y);
-        });
-        setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
-      });
-      this.matrix.sync();
-    } catch(error) {
-      console.log(error);
-    }
+    return time;
   }
 
   async loadFont() {
