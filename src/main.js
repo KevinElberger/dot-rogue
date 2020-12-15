@@ -4,9 +4,12 @@ import cors from 'cors';
 import io from 'socket.io';
 import Game from './dungeonGen/Game.mjs';
 import Matrix from './Matrix.js';
+import GameOfLife from './gameOfLife/GameOfLife';
+import { randomGameOfLife } from './utils';
 
 const app = express();
 var game = null;
+var gameOfLife = null;
 var matrix = new Matrix();
 
 app.use(cors());
@@ -37,6 +40,10 @@ socketio.on('connection', socket => {
     }
     if (option === 'clock') {
       matrix.clock();
+    }
+    if (option === 'game of life') {
+      gameOfLife = new GameOfLife(randomGameOfLife());
+      setInterval(gameOfLife.step, 1000);
     }
   });
 

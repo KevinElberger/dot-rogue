@@ -2,6 +2,7 @@ export default class Cell {
   x;
   y;
   state;
+  color;
 
   constructor(x, y, state) {
     this.x = x;
@@ -15,6 +16,14 @@ export default class Cell {
 
   getY() {
     return this.y;
+  }
+
+  getColor() {
+    return this.color;
+  }
+
+  setColor(color) {
+    this.color = color;
   }
 
   getState() {

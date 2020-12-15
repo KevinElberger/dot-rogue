@@ -1,3 +1,5 @@
+import { MAP_HEIGHT, MAP_WIDTH } from "./constants";
+
 export const getRandomArbitrary = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min);
 };
@@ -15,6 +17,10 @@ export const shuffle = (array) => {
   }
 
   return array;
+};
+
+export const randomGameOfLife = () => {
+  return Array(MAP_HEIGHT).fill().map(() => Array(MAP_WIDTH).fill(getRandomArbitrary(0, 2)));
 };
 
 export const wordsToLines = (maxWidth, words) => {

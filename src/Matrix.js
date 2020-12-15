@@ -126,7 +126,7 @@ export default class Matrix {
     } else if (minutes >= 30 && minutes < 45) {
       time = `${hourMap[hours]} ${minutesSpelled[2]}`;
     } else if (minutes >= 45) {
-      const hour = hourMap[hours] === 12 ? 1 : hourMap[hours + 1];
+      const hour = hourMap[hours] === 12 ? hourMap[0] : hourMap[hours + 1];
       time = `${minutesSpelled[3]} ${hour}`;
     }
 
