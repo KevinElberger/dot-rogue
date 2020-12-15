@@ -22,11 +22,14 @@ export default class Matrix {
       try {
         this.matrix.clear();
         this.matrix.afterSync((mat, dt, t) => {
+          console.log(this.canDraw());
           if (!this.canDraw()) return;
           linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
             this.matrix.drawText(glyph.char, glyph.x, glyph.y);
           });
           this.matrixTimeout = setTimeout(() => {
+            console.log(this);
+            console.log(this.canDraw());
             if (this.canDraw()) {
               this.matrix.sync();
             }
