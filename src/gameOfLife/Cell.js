@@ -3,7 +3,7 @@ export default class Cell {
   y;
   state;
   color;
-  aliveDuration = 0;
+  aliveDuration = 1;
 
   constructor(x, y, state) {
     this.x = x;
