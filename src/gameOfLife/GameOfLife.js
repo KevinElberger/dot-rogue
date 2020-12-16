@@ -69,21 +69,22 @@ export default class GameOfLife {
 
   setNewState(cell, x, y, aliveCount) {
     let newState = cell.getState();
+    let aliveDuration = cell.getAliveDuration();
 
     if (cell.getState() === 'alive') {
       if (aliveCount < 2 || aliveCount > 3) {
         newState = 'dead';
-        cell.setAliveDuration(0);
+        aliveDuration = 0;
       } else if (aliveCount === 2 || aliveCount === 3) {
         newState = 'alive';
-        cell.setAliveDuration(cell.getAliveDuration() + 1);
+        aliveDuration = aliveDuration + 1;
       }
     } else if (aliveCount === 3) {
       newState = 'alive';
-      cell.setAliveDuration(1);
+      aliveDuration = 1;
     }
 
-    return new Cell(x, y, newState);
+    return new Cell(x, y, newState, aliveDuration);
   }
 
   step() {

@@ -3,12 +3,13 @@ export default class Cell {
   y;
   state;
   color;
-  aliveDuration = 1;
+  aliveDuration;
 
-  constructor(x, y, state) {
+  constructor(x, y, state, aliveDuration) {
     this.x = x;
     this.y = y;
     this.state = state;
+    this.aliveDuration = aliveDuration || 1;
   }
 
   getX() {
