@@ -73,6 +73,7 @@ export default class GameOfLife {
     if (cell.getState() === 'alive') {
       if (aliveCount < 2 || aliveCount > 3) {
         newState = 'dead';
+        cell.setAliveDuration(0);
       } else if (aliveCount === 2 || aliveCount === 3) {
         newState = 'alive';
         cell.setAliveDuration(cell.getAliveDuration() + 1);
