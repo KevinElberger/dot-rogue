@@ -3,6 +3,7 @@ export default class Cell {
   y;
   state;
   color;
+  aliveDuration = 0;
 
   constructor(x, y, state) {
     this.x = x;
@@ -32,6 +33,14 @@ export default class Cell {
 
   setState(state) {
     this.state = state;
+  }
+
+  getAliveDuration() {
+    return this.aliveDuration;
+  }
+
+  setAliveDuration(duration) {
+    this.aliveDuration = duration;
   }
 
   clone() {

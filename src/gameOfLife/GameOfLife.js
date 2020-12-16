@@ -75,9 +75,11 @@ export default class GameOfLife {
         newState = 'dead';
       } else if (aliveCount === 2 || aliveCount === 3) {
         newState = 'alive';
+        cell.setAliveDuration(cell.getAliveDuration() + 1);
       }
     } else if (aliveCount === 3) {
       newState = 'alive';
+      cell.setAliveDuration(cell.getAliveDuration() + 1);
     }
 
     return new Cell(x, y, newState);

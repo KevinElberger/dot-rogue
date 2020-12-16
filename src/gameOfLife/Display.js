@@ -16,7 +16,11 @@ export default class Display {
 
   updateCellColor(cell) {
     if (cell.getState() === 'alive') {
-      cell.setColor(COLORS.cyan);
+      if (cell.getAliveDuration() === 1) {
+        cell.setColor(COLORS.cyan);
+      } else {
+        cell.setColor(COLORS.blue);
+      }
     } else {
       cell.setColor(COLORS.black);
     }
@@ -24,7 +28,6 @@ export default class Display {
 
   drawCells(map) {
     const drawGameOfLife = (mat, dt, t) => {
-      this.display.clear();
       this.display.map(([x, y, i]) => map[y][x].getColor());
       setTimeout(() => { this.display.sync() }, ONE_SECOND);
     };
