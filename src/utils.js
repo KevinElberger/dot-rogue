@@ -20,8 +20,17 @@ export const shuffle = (array) => {
 };
 
 export const randomGameOfLife = () => {
-  return Array(MAP_HEIGHT).fill(Math.random() > 0.4 ? 1 : 0)
-    .map(() => Array(MAP_WIDTH).fill(Math.random() > 0.4 ? 1 : 0));
+  const arr = [];
+  const getRandom = () => Math.random() > 0.4 ? 1 : 0;
+
+  for(let i = 0; i < 32; i++) {
+    arr[i] = [];
+    for (let j = 0; j < 32; j++) {
+      arr[i][j] = getRandom();
+    }
+  }
+
+  return arr;
 };
 
 export const wordsToLines = (maxWidth, words) => {
