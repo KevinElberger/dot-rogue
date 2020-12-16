@@ -25,13 +25,7 @@ export default class Display {
   drawCells(map) {
     const drawGameOfLife = (mat, dt, t) => {
       this.display.clear();
-      this.display.map(([x, y, i]) => {
-        if (map[y][x].getState() === 'alive') {
-          return COLORS.blue;
-        }
-        return COLORS.black;
-      });
-
+      this.display.map(([x, y, i]) => map[x][y].getColor());
       setTimeout(() => { this.display.sync() }, ONE_SECOND);
     };
 
