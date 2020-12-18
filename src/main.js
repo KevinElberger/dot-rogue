@@ -10,7 +10,7 @@ import { randomGameOfLife } from './utils.js';
 const app = express();
 var game = null;
 var gameOfLife = null;
-var matrix = new Matrix();
+var matrix = null;
 
 app.use(cors());
 app.use(express.json());
@@ -33,12 +33,14 @@ socketio.on('connection', socket => {
     }
 
     if (option === 'meeting') {
+      matrix = new Matrix();
       matrix.meeting();
     }
     if (option === 'pulse') {
 
     }
     if (option === 'clock') {
+      matrix = new Matrix();
       matrix.clock();
     }
     if (option === 'game of life') {
@@ -49,7 +51,7 @@ socketio.on('connection', socket => {
   });
 
   socket.on('clear', () => {
-    matrix.stopMatrix();
+    if (matrix) matrix.stopMatrix();
     socket.emit('unselected');
   });
 
