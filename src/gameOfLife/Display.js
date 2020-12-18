@@ -33,7 +33,6 @@ export default class Display {
     };
 
     try {
-      this.display.clear();
       this.display.afterSync(drawGameOfLife);
       this.display.sync();
     } catch(error) {
