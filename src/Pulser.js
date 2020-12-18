@@ -1,4 +1,4 @@
-class Pulser {
+export default class Pulser {
   constructor(x, y, f) {}
 
   nextColor(t) {
