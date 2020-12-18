@@ -37,7 +37,8 @@ socketio.on('connection', socket => {
       matrix.meeting();
     }
     if (option === 'pulse') {
-
+      matrix = new Matrix();
+      matrix.pulse();
     }
     if (option === 'clock') {
       matrix = new Matrix();
