@@ -2,7 +2,7 @@ import * as globby from 'globby';
 import { basename } from 'path';
 import { Font, LedMatrix } from 'rpi-led-matrix';
 import { linesToMappedGlyphs, textToLines } from './utils.js';
-import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND } from './constants.js';
+import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND, ONE_MINUTE } from './constants.js';
 import Pulser from './Pulser.js';
 
 export default class Matrix {
@@ -26,7 +26,7 @@ export default class Matrix {
         linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
           this.matrix.drawText(glyph.char, glyph.x, glyph.y);
         });
-        setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
+        setTimeout(() => { this.matrix.sync() }, ONE_MINUTE);
       }
     };
 
