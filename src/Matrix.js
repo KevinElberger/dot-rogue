@@ -3,6 +3,7 @@ import { basename } from 'path';
 import { Font, LedMatrix } from 'rpi-led-matrix';
 import { linesToMappedGlyphs, textToLines } from './utils.js';
 import { matrixOptions, runtimeOptions, COLORS, ONE_SECOND } from './constants.js';
+import Pulser from './Pulser.js';
 
 export default class Matrix {
   width = 32;
