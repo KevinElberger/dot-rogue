@@ -27,7 +27,7 @@ export default class Matrix {
         linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
           this.matrix.drawText(glyph.char, glyph.x, glyph.y);
         });
-        setTimeout(() => { this.matrix.sync() }, ONE_MINUTE);
+        setTimeout(() => { this.matrix.sync() }, 0);
       }
     };
 
