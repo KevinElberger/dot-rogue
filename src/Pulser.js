@@ -1,5 +1,13 @@
 export default class Pulser {
-  constructor(x, y, f) {}
+  x;
+  y;
+  f;
+
+  constructor(x, y, f) {
+    this.x = x;
+    this.y = y;
+    this.f = y;
+  }
 
   nextColor(t) {
     const brightness = 0xFF & Math.max(0, (255 * (Math.sin(this.f * t / 1000))));
