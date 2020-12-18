@@ -57,7 +57,6 @@ export default class Matrix {
     }
 
     try {
-      this.matrix.clear();
       this.matrix.afterSync((mat, dt, t) => {
         pulsers.map(pulser => {
           this.matrix.fgColor(pulser.nextColor(t)).setPixel(pulser.x, pulser.y);
