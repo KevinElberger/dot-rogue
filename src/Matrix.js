@@ -49,8 +49,8 @@ export default class Matrix {
   pulse() {
     const pulsers = [];
 
-    for (let x = 0; x < matrix.width(); x++) {
-      for (let y = 0; y < matrix.height(); y++) {
+    for (let x = 0; x < this.matrix.width(); x++) {
+      for (let y = 0; y < this.matrix.height(); y++) {
         pulsers.push(new Pulser(x, y, 5 * Math.random()));
       }
     }
