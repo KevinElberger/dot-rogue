@@ -62,7 +62,7 @@ export default class Matrix {
         pulsers.map(pulser => {
           this.matrix.fgColor(pulser.nextColor(t)).setPixel(pulser.x, pulser.y);
         });
-        setTimeout(() => { this.matrix.sync() }, ONE_SECOND);
+        setTimeout(() => { this.matrix.sync() }, 0);
       });
       this.matrix.sync();
     } catch(error) {
