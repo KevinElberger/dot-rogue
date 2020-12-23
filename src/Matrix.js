@@ -23,7 +23,6 @@ export default class Matrix {
 
     const drawMeetingText = (mat, dt, t) => {
       if (this.drawMeeting) {
-        this.matrix.clear();
         linesToMappedGlyphs(lines, font.height(), this.width, this.height, alignmentH, alignmentV).map(glyph => {
           this.matrix.drawText(glyph.char, glyph.x, glyph.y);
         });
