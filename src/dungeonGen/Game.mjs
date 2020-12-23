@@ -70,10 +70,10 @@ export default class Game {
     const right = direction === 'right';
     const pos = { x: this.player.x, y: this.player.y };
 
-    if (up) pos.x += -1;
-    if (down) pos.x += 1;
-    if (left) pos.y += -1;
-    if (right) pos.y += 1;
+    if (up) pos.y += -1;
+    if (down) pos.y += 1;
+    if (left) pos.x += -1;
+    if (right) pos.x += 1;
 
     return pos;
   }
